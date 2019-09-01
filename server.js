@@ -14,14 +14,10 @@ const signout = require('./controllers/signout');
 
 if (process.env.NODE_ENV !== 'production') require('dotenv').config();
 
+// for using locally and connecting to pgAdmin
 const db = knex({
   client: 'pg',
-  connection: {
-    host : '127.0.0.1',
-    user : process.env.POSTGRES_USER,
-    password : process.env.POSTGRES_PASSWORD,
-    database : 'facerecognitiondb'
-  }
+  connection: process.env.DATABASE_URL
 });
 
 const app = express();
