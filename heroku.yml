@@ -8,7 +8,5 @@ build:
   docker:
     web: Dockerfile
     db: postgres/Dockerfile
-  config:
-    NODE_ENV: development
 run:
   web: npm start
