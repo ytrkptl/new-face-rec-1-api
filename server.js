@@ -29,12 +29,15 @@ const whitelist = [
   'http://localhost:3001',
   'https://new-face-rec-1.herokuapp.com',
   'https://facerecognition1-api.herokuapp.com/',
-  'https://facerecognition1-api.herokuapp.com'
+  'https://facerecognition1-api.herokuapp.com',
+  'https://facerecognition1-api.herokuapp.com/favicon.ico',
+  'facerecognition1-api.herokuapp.com',
+  // '/\.new-face-rec-1\.com$/'
 ]
 
 const corsOptions = {
   origin: function (origin, callback) {
-    if (whitelist.indexOf(origin) !== -1) {
+    if (whitelist.indexOf(origin) !== -1 || !origin) {
       callback(null, true)
     } else {
       callback(new Error('Not allowed by CORS'))
