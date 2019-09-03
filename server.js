@@ -14,7 +14,8 @@ const signout = require('./controllers/signout');
 
 if (process.env.NODE_ENV !== 'production') require('dotenv').config();
 
-// for using locally and connecting to pgAdmin
+// for using locally and connecting to pgAdmin as well
+// as for making calls to heroku postgres from server
 const db = knex({
   client: 'pg',
   connection: {
