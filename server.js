@@ -26,8 +26,23 @@ const db = knex({
 
 const app = express();
 
+const whitelist = [
+  'http://localhost:3001',
+  /\.new-face-rec-1\.herokuapp\.com$/,
+]
+
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS'))
+    }
+  }
+}
+
 app.use(morgan('combined'));
-app.use(cors())
+app.use(cors(corsOptions))
 app.use(bodyParser.json());
 
 app.get('/favicon.ico', (req, res) => res.status(204));
