@@ -27,7 +27,9 @@ const app = express();
 
 const whitelist = [
   'http://localhost:3001',
-  'https://new-face-rec-1.herokuapp.com'
+  'https://new-face-rec-1.herokuapp.com',
+  'https://facerecognition1-api.herokuapp.com/',
+  'https://facerecognition1-api.herokuapp.com'
 ]
 
 const corsOptions = {
