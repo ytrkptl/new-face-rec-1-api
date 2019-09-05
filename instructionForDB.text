@@ -4,40 +4,41 @@
   -- heroku pg:psql
 (https://www.taniarascia.com/node-express-postgresql-heroku/)
 the link above is just for help but don't follow it exactly
-  -- then simply 
-  -- comment out the following
-  -- copy-paste all of it 
-  -- and press enter
+  -- Make sure you are using the proper column names and such before 
+  -- beginning transaction
+  -- copy-paste the needed parts and simply press enter
+
+  -- may be able to do it without "BEGIN TRANSACTION" and "COMMIT";
 
 
 
--- BEGIN TRANSACTION;
+BEGIN TRANSACTION;
 
--- CREATE TABLE login (
---   id serial PRIMARY KEY,
---   hash VARCHAR(100) NOT NULL,
---   email text UNIQUE NOT NULL
--- );
+CREATE TABLE login (
+  id serial PRIMARY KEY,
+  hash VARCHAR(100) NOT NULL,
+  email text UNIQUE NOT NULL
+);
 
--- COMMIT;
+COMMIT;
 
--- BEGIN TRANSACTION;
+BEGIN TRANSACTION;
 
--- CREATE TABLE users (
---   id SERIAL PRIMARY KEY,
---   name VARCHAR(100),
---   email text UNIQUE NOT NULL,
---   entries BIGINT DEFAULT 0,
---   joined TIMESTAMP NOT NULL,
---   pet VARCHAR(100) DEFAULT 'None',
---   age SMALLINT DEFAULT 1 CHECK (age > 0)
--- );
+CREATE TABLE users (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(100),
+  email text UNIQUE NOT NULL,
+  entries BIGINT DEFAULT 0,
+  joined TIMESTAMP NOT NULL,
+  pet VARCHAR(100) DEFAULT 'None',
+  age SMALLINT DEFAULT 1 CHECK (age > 0)
+);
 
--- COMMIT;
+COMMIT;
 
--- BEGIN TRANSACTION;
+BEGIN TRANSACTION;
 
--- INSERT into users (name, email, entries, joined, pet, age) values ('a', 'a@a.com', 5, '2019-08-12', 'dragon', 60);
--- INSERT into login(hash, email) values ('$2a$10$WAK21U0LWl7C//jJ.DOB2uPP1DJQh7KUDgasdyQeGzkop2Pzl8W7u', 'a@a.com');
+INSERT into users (name, email, entries, joined, pet, age) values ('a', 'a@a.com', 5, '2019-08-12', 'dragon', 60);
+INSERT into login(hash, email) values ('$2a$10$WAK21U0LWl7C//jJ.DOB2uPP1DJQh7KUDgasdyQeGzkop2Pzl8W7u', 'a@a.com');
 
--- COMMIT;
+COMMIT;
