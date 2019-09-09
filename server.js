@@ -5,6 +5,9 @@ const knex = require('knex');
 const bcrypt = require('bcrypt');
 const morgan = require('morgan');
 
+// comes with Express.
+const path = require('path');
+
 const register = require('./controllers/register');
 const signin = require('./controllers/signin');
 const profile = require('./controllers/profile');
@@ -31,7 +34,10 @@ app.use(cors())
 app.use(bodyParser.json());
 
 app.get('/favicon.ico', (req, res) => res.status(204));
-app.get('/', (req, res) => { res.send('It is working! ') })
+app.get('/', (req, res) => {
+  // res.send('It is working! ') 
+  res.sendFile(path.join(__dirname + '/index.html'));
+});
 app.post('/signin', signin.signinAuthentication(db, bcrypt))
 app.post('/register', register.registerAuthentication(db, bcrypt))
 app.get('/profile/:id', auth.requireAuth, (req, res) => { profile.handleProfileGet(req, res, db) })
