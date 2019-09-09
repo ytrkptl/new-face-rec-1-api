@@ -35,7 +35,6 @@ app.use(bodyParser.json());
 
 app.get('/favicon.ico', (req, res) => res.status(204));
 app.get('/', (req, res) => {
-  // res.send('It is working! ') 
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 app.post('/signin', signin.signinAuthentication(db, bcrypt))
