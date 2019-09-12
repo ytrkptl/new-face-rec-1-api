@@ -31,7 +31,8 @@ CREATE TABLE users (
   entries BIGINT DEFAULT 0,
   joined TIMESTAMP NOT NULL,
   pet VARCHAR(100) DEFAULT 'None',
-  age SMALLINT DEFAULT 1 CHECK (age > 0)
+  age SMALLINT DEFAULT 1 CHECK (age > 0),
+  handle VARCHAR(200)
 );
 
 COMMIT;
