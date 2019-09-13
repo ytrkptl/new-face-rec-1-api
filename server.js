@@ -14,7 +14,6 @@ const profile = require('./controllers/profile');
 const image = require('./controllers/image');
 const auth = require('./controllers/authorization');
 const signout = require('./controllers/signout');
-const Airtable = require('airtable');
 
 if (process.env.NODE_ENV !== 'production') require('dotenv').config();
 
@@ -28,7 +27,6 @@ const db = knex({
   }
 });
 
-let base = new Airtable({apiKey: `${process.env.AIRTABLE_API_KEY}`}).base(`${process.env.AIRTABLE_BASE}`);
 const app = express();
 
 app.use(morgan('combined'));
