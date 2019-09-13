@@ -36,7 +36,6 @@ const handleProfilePhoto = (req, res, db, base) => {
   
   let responseToSend = '';
 
-
   base('Table 1').create([
     {
       "fields": {
@@ -57,7 +56,7 @@ const handleProfilePhoto = (req, res, db, base) => {
 
   db('users')
     .where({ id })
-    .update({ photourl })
+    .update({ handle: photourl })
     .then(resp => {
       if(resp) {
         let responseToSend = responseToSend + 'successfully inserted photourl in db'
@@ -67,7 +66,7 @@ const handleProfilePhoto = (req, res, db, base) => {
         res.status(400).json(responseToSend)
       }
     })
-    .catch(err => res.status(400).json('Error updating user in db'))
+    .catch(err => res.status(400).json('Error updating photourl in db'))
 }
 
 module.exports = {
