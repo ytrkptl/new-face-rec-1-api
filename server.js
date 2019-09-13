@@ -14,6 +14,7 @@ const profile = require('./controllers/profile');
 const image = require('./controllers/image');
 const auth = require('./controllers/authorization');
 const signout = require('./controllers/signout');
+const Airtable = require('airtable');
 
 if (process.env.NODE_ENV !== 'production') require('dotenv').config();
 
@@ -27,6 +28,7 @@ const db = knex({
   }
 });
 
+let base = new Airtable({apiKey: `${process.env.AIRTABLE_API_KEY}`}).base(`${process.env.AIRTABLE_BASE}`);
 const app = express();
 
 app.use(morgan('combined'));
@@ -40,8 +42,8 @@ app.get('/', (req, res) => {
 app.post('/signin', signin.signinAuthentication(db, bcrypt))
 app.post('/register', register.registerAuthentication(db, bcrypt))
 app.get('/profile/:id', auth.requireAuth, (req, res) => { profile.handleProfileGet(req, res, db) })
-// app.post('/profile/:id', auth.requireAuth, (req, res) => { profile.handleProfileUpdate(req, res, db)})
-app.post('/profile/:id', auth.requireAuth, (req, res) => { profile.handleProfileUpdateWithPhoto(req, res, db)})
+app.post('/profile/:id', auth.requireAuth, (req, res) => { profile.handleProfileUpdate(req, res, db)})
+app.post('/upload/:id', auth.requireAuth, (req, res) => { profile.handleProfilePhoto(req, res, base)})
 app.put(('/image'), auth.requireAuth, (req, res) => { image.handleImage(req, res, db) })
 app.post('/imageurl', auth.requireAuth, (req, res) => { image.handleApiCall(req, res) })
 app.delete('/signout', (req, res) => {signout.removeAuthToken(req, res)})

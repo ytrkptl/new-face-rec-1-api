@@ -1,3 +1,5 @@
+
+
 const handleProfileGet = (req, res, db) => {
   const { id } = req.params;
   db.select('*').from('users').where({id})
@@ -27,39 +29,47 @@ const handleProfileUpdate = (req, res, db) => {
     .catch(err => res.status(400).json('Error updating user'))
 }
 
-const handleProfileUpdateWithPhoto = (req, res, db) => {
+const handleProfilePhoto = (req, res, base) => {
   const { id } = req.params;
-  const { name, age, pet, photourl } = req.body.formInput;
+  const { photourl } = req.body;
 
-  if (photourl === '' || photourl === undefined) {
-    console.log(photourl)
-    return db('users')
-    .where({ id })
-    .update({ name, age, pet })
-    .then(resp => {
-      if(resp) {
-        res.json("success")
-      } else {
-        res.status(400).json('Unable to update')
+  base('Table 1').create([
+    {
+      "fields": {
+        "dbId": id,
+        "photourl": photourl
       }
-    })
-    .catch(err => res.status(400).json('Error updating user'))
-  }
-  return db('users')
-    .where({ id })
-    .update({ name, age, pet, photourl })
-    .then(resp => {
-      if(resp) {
-        res.json("success")
-      } else {
-        res.status(400).json('Unable to update')
-      }
-    })
-    .catch(err => res.status(400).json('Error updating user'))
+    }
+  ], function(err, records) {
+    if (err) {
+      console.error(err);
+      res.status(400).send('some error occured')
+      return;
+    }
+    records.forEach(function (record) {
+      let url = record.url;
+      console.log(record.url);
+      res.status(200).send(record.url)
+      return;
+    });
+  });
+
+
+  // return db('users')
+  //   .where({ id })
+  //   .update({ photourl })
+  //   .then(resp => {
+  //     if(resp) {
+  //       res.json("success")
+  //     } else {
+  //       res.status(400).json('Unable to update')
+  //     }
+  //   })
+  //   .catch(err => res.status(400).json('Error updating user'))
 }
 
 module.exports = {
   handleProfileGet,
   handleProfileUpdate,
-  handleProfileUpdateWithPhoto
+  handleProfilePhoto
 }
