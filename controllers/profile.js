@@ -29,9 +29,13 @@ const handleProfileUpdate = (req, res, db) => {
     .catch(err => res.status(400).json('Error updating user'))
 }
 
-const handleProfilePhoto = (req, res, base) => {
+const handleProfilePhoto = (req, res, db, base) => {
   const { id } = req.params;
   const { photourl } = req.body;
+  console.log(photourl);
+  
+  let responseToSend = '';
+
 
   base('Table 1').create([
     {
@@ -42,30 +46,28 @@ const handleProfilePhoto = (req, res, base) => {
     }
   ], function(err, records) {
     if (err) {
-      console.error(err);
-      res.status(400).send('some error occured')
-      return;
+      let responseToSend = responseToSend + 'error occured in Airtable ';
     }
     records.forEach(function (record) {
-      let url = record.url;
-      console.log(record.url);
-      res.status(200).send(record.url)
+      let someurl = record.get('photourl');
+      responseToSend = `${someurl} was inserted in airtable`;
       return;
     });
   });
 
-
-  // return db('users')
-  //   .where({ id })
-  //   .update({ photourl })
-  //   .then(resp => {
-  //     if(resp) {
-  //       res.json("success")
-  //     } else {
-  //       res.status(400).json('Unable to update')
-  //     }
-  //   })
-  //   .catch(err => res.status(400).json('Error updating user'))
+  db('users')
+    .where({ id })
+    .update({ photourl })
+    .then(resp => {
+      if(resp) {
+        let responseToSend = responseToSend + 'successfully inserted photourl in db'
+        res.status(200).json(responseToSend);
+      } else {
+        responseToSend = responseToSend + 'Unable to insert photourl in db'
+        res.status(400).json(responseToSend)
+      }
+    })
+    .catch(err => res.status(400).json('Error updating user in db'))
 }
 
 module.exports = {
