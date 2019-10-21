@@ -4,7 +4,8 @@
   "description": "This app detects faces in images.",
   "main": "script.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "dev": "nodemon server.js"
   },
   "keywords": [],
   "author": "Yatrik Patel",
@@ -17,8 +18,9 @@
     "dotenv": "^8.1.0",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
-    "knex": "^0.19.3",
+    "knex": "^0.19.5",
     "morgan": "^1.9.1",
+    "nodemailer": "^6.3.0",
     "pg": "^7.12.1",
     "redis": "^2.8.0"
   },
