@@ -10,10 +10,15 @@ const path = require('path');
 
 const register = require('./controllers/register');
 const signin = require('./controllers/signin');
+const forgot = require('./controllers/forgot/forgot-step1');
+const reset = require('./controllers/forgot/forgot-step2');
+const updateNewPassword = require('./controllers/forgot/forgot-step3');
 const profile = require('./controllers/profile');
 const image = require('./controllers/image');
 const auth = require('./controllers/authorization');
 const signout = require('./controllers/signout');
+// const sendEmail = require('./controllers/send-email');
+
 
 if (process.env.NODE_ENV !== 'production') require('dotenv').config();
 
@@ -39,6 +44,9 @@ app.get('/', (req, res) => {
 });
 app.post('/signin', signin.signinAuthentication(db, bcrypt))
 app.post('/register', register.registerAuthentication(db, bcrypt))
+app.post('/forgot', (req, res) => { forgot.handleForgotPassword(db, req, res) })
+app.post('/reset', (req, res) => { reset.handleResetId(req, res) })
+app.post('/update-new-password', (req, res) => { updateNewPassword.handleUpdateNewPassword(req, res, db, bcrypt) })
 app.get('/profile/:id', auth.requireAuth, (req, res) => { profile.handleProfileGet(req, res, db) })
 app.post('/profile/:id', auth.requireAuth, (req, res) => { profile.handleProfileUpdate(req, res, db)})
 app.post('/upload/:id', auth.requireAuth, (req, res) => { profile.handleProfilePhoto(req, res, db)})
