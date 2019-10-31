@@ -1,5 +1,5 @@
 {
-  "name": "face-rec-clone-no-docker",
+  "name": "new-face-rec-1-api",
   "version": "1.0.0",
   "description": "This app detects faces in images.",
   "main": "script.js",
