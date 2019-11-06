@@ -1,5 +1,5 @@
 const redisClient = require('../signin').redisClient;
-const handleSendingEmail = require('../send-email').handleSendingEmail;
+const handleSendingEmail = require('../send-email-forgot').handleSendingEmail;
 
 const setToken = (key, value) => Promise.resolve(redisClient.set(key, value, 'EX', 3600))
 
@@ -70,5 +70,5 @@ const handleForgotPassword = async (db, req, res) => {
 }
 
 module.exports = {
-  handleForgotPassword: handleForgotPassword,
+  handleForgotPassword: handleForgotPassword
 }

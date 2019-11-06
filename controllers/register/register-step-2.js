@@ -1,5 +1,5 @@
-const jwt = require('./signin').jwt;
-const redisClient = require('./signin').redisClient;
+const jwt = require('../signin').jwt;
+const redisClient = require('../signin').redisClient;
 
 const signToken = (username) => {
   const jwtPayload = { username };
@@ -33,16 +33,19 @@ const createSession = (user) => {
 const handleRegister = (db, bcrypt, req, res) => {
 
   const { confirmationId } = req.body;
-
-  return getMultipleValues('randomId', 'name', 'email', 'password')
+  let uniqueKey = confirmationId + ' ';
+  return getMultipleValues(uniqueKey + 'randomId', uniqueKey + 'name', uniqueKey + 'email', uniqueKey + 'password')
   .then(values=>{
-    let randomId = values[0]
+    let randomId = values[0].slice(0,37)
+    console.log(randomId)
     let name = values[1]
     let email = values[2]
-    let password = values[3]
-    if(values[0]===confirmationId) {
-      const saltRounds = 10;
-      const hash = bcrypt.hashSync(password, saltRounds);
+    let hash = values[3]
+    console.log(values)
+    if(randomId===confirmationId) {
+      console.log('5th step')
+      // const saltRounds = 10;
+      // const hash = bcrypt.hashSync(password, saltRounds);
       return db.transaction(trx => {
         trx.insert({
           hash: hash,
@@ -63,10 +66,10 @@ const handleRegister = (db, bcrypt, req, res) => {
         .then(trx.commit)
         .catch(trx.rollback)
       })
-      .catch(err => err)
+      .catch(err => {console.log(err + '6th step')})
     }
   })
-  .catch(err=>err) 
+  .catch(err=>{console.log(err + '7th step')}) 
 }
 
 const getAuthTokenId = (req, res) => {

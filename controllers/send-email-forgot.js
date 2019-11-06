@@ -21,13 +21,18 @@ const handleSendingEmail = (someToken, req, res) => {
     //only using my email to send from
     from: process.env.USER_EMAIL,
     //only using my email to send to
-    to: `${yourEmail}`,
+    to: `ytrkptl@gmail.com`,
     // Subject line
     subject: `From ${name}`, 
     // plain text body
     // text: 'Hello world?', 
     // don't allow sending html below
-    html: `<h2>${yourEmail}</h2><br/><h3>${message}<h3><a href="#">${someToken}</a>`
+    html: `
+      <h2>${name}</h2>
+      <br/>
+      <h3>${message}<h3>
+      <a href="http://localhost:3001">${someToken}</a>
+      `
 };
 
   transporter.sendMail(mailOptions, function(error, info){
