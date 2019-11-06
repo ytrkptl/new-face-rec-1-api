@@ -21,7 +21,7 @@ const handleSendingEmailConfirmation = (someToken, req, res) => {
     //only using my email to send from
     from: process.env.USER_EMAIL,
     //only using my email to send to
-    to: `ytrkptl@gmail.com`,
+    to: `${yourEmail}`,
     // Subject line
     subject: `From ${name}`, 
     // plain text body

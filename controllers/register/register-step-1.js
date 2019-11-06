@@ -9,10 +9,8 @@ const keyExists = (key) => {
   return new Promise((resolve, reject) => {
     redisClient.exists(key, function (error, result) {
     if (error) {
-      console.log(error + 'bbbaaaa');
       reject(error)
     }
-    console.log(result + 'boooo')
     resolve(result)
     });
   })
@@ -37,10 +35,8 @@ const setMultipleValuesWithEx = (someKeys, someVals) => {
     a.exec();
 
     if (resolve) {
-      console.log('resolved')
       resolve(true)
     } else if (reject) {
-      console.log('rejected')
       reject(false)
     }
   })
@@ -62,10 +58,8 @@ const getMultipleValuesWithEx = (someKeys) => {
     a.exec();
 
     if (resolve) {
-      console.log('resolved')
       Promise.resolve(true)
     } else if (reject) {
-      console.log('rejected')
       Promise.reject(false)
     }
   })
@@ -80,19 +74,15 @@ const uuidv4 = () => {
 
 const viewAll = (key='*')=> redisClient.keys(key, function (error, result) {
   if (error) {
-    console.log(error);
     throw error;
   }
-  console.log(result)
   return result;
 });
 
 const getToken = (key) => redisClient.mget(key, function (error, result) {
   if (error) {
-    console.log(error);
     throw error;
   }
-  console.log(result)
   return result;
 });
 
@@ -103,18 +93,13 @@ const flushAllFromRedis = () => redisClient.flushdb(function (err, succeeded) {
 
 const handleRegisterWithEmail = async (db, bcrypt, req, res) => {
 
-	// flushAllFromRedis()
-	// viewAll()
-
   const { name, email, password } = req.body;
   if (!name || !email || !password) {
      return res.status(400).json('Please fill out a valid form')
   }
-  // viewAll();
   db.select('id', 'email').from('users')
     .where({'email': email})
     .then(user => {
-    	console.log('user is ' + user[0])
       if (user[0]===undefined) {
           const randomId = uuidv4();
           let passwordEnc = bcrypt.hashSync(password, 10);
@@ -123,46 +108,34 @@ const handleRegisterWithEmail = async (db, bcrypt, req, res) => {
           keyExists(email)
           .then(x=>{
             if(x===0) {
-              console.log('dasreadched here')
               // if key does not exists 
               setMultipleValuesWithEx(someKeys, someVals)
               .then(check=>{
-                console.log('check = ' + check)
                 if (check===true) {
-                  console.log('send email')
                   handleSendingEmailConfirmation(randomId, req, res)
                 } else {
-                  console.log('noooo error')
-                  Promise.reject('noooo error')
+                  Promise.reject('noooo error').catch(err=>err)
                 }
               })
               .catch(err=>{
-                console.log('Something went wrong in step 1 ' + err)
+                Promise.reject('key already exists').catch(err=>err)
               })
             } 
             else {
-              console.log(x + ' viewing all')
-              viewAll()
-              Promise.reject('key already exists').catch(()=>console.log('key exists'))
+              Promise.reject('key already exists').catch(err=>err)
             }
           })
           .catch(err=> {
-            console.log(err + 'erraaarr')
-            viewAll()
             return res.status(400).json('An email with confirmation code has already been sent to this email address.')
           })
-          viewAll()
-        return res.status(200).json('1Please check your email and enter the code provided in the box below')
+        return res.status(200).json('Please check your email and enter the code provided in the box below')
       }
       else {
-        viewAll()
-        return res.status(200).json('2Please check your email and enter the code provided in the box below')
+        return res.status(200).json('Please check your email and enter the code provided in the box below')
       }
     })
     .catch(err => {
-    	console.log(err + 'errrqur')
-      viewAll()
-      return res.status(200).json(`3Please dsfadf check your email and enter the code provided in the box below`)
+      return res.status(200).json(`Please check your email and enter the code provided in the box below `)
     })
 }
 

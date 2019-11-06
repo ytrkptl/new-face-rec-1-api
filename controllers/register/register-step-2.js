@@ -15,7 +15,6 @@ const getMultipleValues = (key1, key2, key3, key4) => {
     if (error) {
       reject(error);
     }
-    console.log(result)
     resolve(result);
   })
 })}
@@ -27,7 +26,7 @@ const createSession = (user) => {
     .then(() => {
       return { success: 'true', userId: id, token, user }
     })
-    .catch(console.log);
+    .catch(err=>err);
 };
 
 const handleRegister = (db, bcrypt, req, res) => {
@@ -37,15 +36,10 @@ const handleRegister = (db, bcrypt, req, res) => {
   return getMultipleValues(uniqueKey + 'randomId', uniqueKey + 'name', uniqueKey + 'email', uniqueKey + 'password')
   .then(values=>{
     let randomId = values[0].slice(0,37)
-    console.log(randomId)
     let name = values[1]
     let email = values[2]
     let hash = values[3]
-    console.log(values)
     if(randomId===confirmationId) {
-      console.log('5th step')
-      // const saltRounds = 10;
-      // const hash = bcrypt.hashSync(password, saltRounds);
       return db.transaction(trx => {
         trx.insert({
           hash: hash,
@@ -66,10 +60,10 @@ const handleRegister = (db, bcrypt, req, res) => {
         .then(trx.commit)
         .catch(trx.rollback)
       })
-      .catch(err => {console.log(err + '6th step')})
+      .catch(err =>err)
     }
   })
-  .catch(err=>{console.log(err + '7th step')}) 
+  .catch(err=>err) 
 }
 
 const getAuthTokenId = (req, res) => {
