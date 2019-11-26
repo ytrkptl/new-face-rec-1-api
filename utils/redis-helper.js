@@ -16,7 +16,7 @@ const getToken = key => {
       }
       resolve(result)
     })
-  }).catch(err=>console.log(err + 'tohererere'))
+  }).catch(err=>console.log(err + ' from redisHelper.js line 19'))
 }
 
 const deleteToken = (key) => Promise.resolve(redisClient.del(key));
@@ -37,10 +37,8 @@ const keyExists = (key) => {
 // whose default value is '*', which return all keys from redis
 const viewAll = (key='*')=> redisClient.keys(key, function (error, result) {
   if (error) {
-    console.log(error);
     throw error;
   }
-  console.log(result)
   return result;
 });
 

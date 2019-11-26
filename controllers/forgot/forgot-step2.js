@@ -10,10 +10,8 @@ const handleResetId = (req, res) => {
   
   redisHelper.keyExists(yourEmail)
   .then(ans=>{
-    console.log(ans)
     redisHelper.getToken(yourEmail)
     .then(x=>{
-      console.log(x)
       if (x===resetId) {
         return res.status(200).json('Reset Id matches')
       } 

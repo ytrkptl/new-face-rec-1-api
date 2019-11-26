@@ -41,7 +41,7 @@ const handleSignin = (db, bcrypt, req, res) => {
 
 const getAuthTokenId = (req, res) => {
   const { authorization } = req.headers;
-  return redisHelper.get(authorization, (err, reply) => {
+  return redisHelper.getToken(authorization, (err, reply) => {
     if (err || !reply) {
       return res.status(401).send('Unauthorized');
     }

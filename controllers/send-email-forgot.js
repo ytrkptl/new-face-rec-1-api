@@ -28,20 +28,21 @@ const handleSendingEmail = (someToken, req, res) => {
     // text: 'Hello world?', 
     // don't allow sending html below
     html: `
-      <h2>${name}</h2>
+      <h2>Hi ${name},</h2>
       <br/>
-      <h3>${message}<h3>
+      <h3>Did you forget your email. We are sorry to hear that. However,
+      there is a way for you to retrieve it. Copy and paste the code provided
+      below into the resetId input provided on our site.<h3>
       <a href="http://localhost:3001">${someToken}</a>
+      <h4>Any other messages: ${message} </h4>
       `
 };
 
   transporter.sendMail(mailOptions, function(error, info){
     if (error) {
-      console.log(error);
       return res.status(400).send(`Something went wrong. Please use the following email
         address to send Yatrik an email: ${process.env.USER_EMAIL_ID_TO_SHOW}`);
     } else {
-      console.log('Email sent: ' + info.response);
       return res.status(200).send(`Your email was sent successfully. Yatrik will
         get back in touch with you as soon as possible. Thanks for your interest.`);
     }

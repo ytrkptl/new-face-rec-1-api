@@ -23,10 +23,8 @@ const handleUpdateNewPassword = async (req, res, db, bcrypt) => {
     .catch(trx.rollback)
   })
   .then(()=>{return res.status(200).json('Password reset complete')})
-  .catch(err => console.log('from here ' + err))
+  .catch(err => console.log('from forgot step 3 ' + err))
 }
-// $2a$10$WAK21U0LWl7C//jJ.DOB2uPP1DJQh7KUDgasdyQeGzkop2Pzl8W7u
-
 
 module.exports = {
   handleUpdateNewPassword: handleUpdateNewPassword

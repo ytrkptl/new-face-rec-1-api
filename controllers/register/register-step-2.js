@@ -13,13 +13,14 @@ const createSession = (user) => {
     .then(() => {
       return { success: 'true', userId: id, token, user }
     })
-    .catch(err=>err);
+    .catch(err=>console.log(err));
 };
 
 const handleRegister = (db, bcrypt, req, res) => {
-  // redisHelper.viewAll();
+
   const { confirmationId } = req.body;
   let uniqueKey = confirmationId + ' ';
+  
   return redisHelper.getMultipleValues(uniqueKey + 'randomId', uniqueKey + 'name', uniqueKey + 'email', uniqueKey + 'password')
   .then(values=>{
     let randomId = values[0].slice(0,37)
@@ -55,7 +56,7 @@ const handleRegister = (db, bcrypt, req, res) => {
 
 const getAuthTokenId = (req, res) => {
   const { authorization } = req.headers;
-  return redisHelper.get(authorization, (err, reply) => {
+  return redisHelper.getToken(authorization, (err, reply) => {
     if (err || !reply) {
       return res.status(401).send('Unauthorized');
     }

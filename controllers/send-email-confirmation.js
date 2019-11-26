@@ -17,8 +17,6 @@ const handleSendingEmailConfirmation = (someToken, req, res) => {
       pass: process.env.USER_PASS
     }
   });
-  console.log(email, name, password)
-  // console.log(y)
   let mailOptions = {
     //only using my email to send from
     from: process.env.USER_EMAIL,
@@ -33,17 +31,15 @@ const handleSendingEmailConfirmation = (someToken, req, res) => {
       <h2>${name}</h2>
       <br/>
       <h3>Copy the code below and paste it in the confirmation box provided.<h3>
-      ${someToken}</a>
+      <a>${someToken}</a>
       `
 };
 
   transporter.sendMail(mailOptions, function(error, info){
     if (error) {
-      console.log(error);
       return res.status(400).send(`Something went wrong. Please use the following email
         address to send Yatrik an email: ${process.env.USER_EMAIL_ID_TO_SHOW}`);
     } else {
-      console.log('Email sent: ' + info.response);
       return res.status(200).send(`Your email was sent successfully. Yatrik will
         get back in touch with you as soon as possible. Thanks for your interest.`);
     }

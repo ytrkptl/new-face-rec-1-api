@@ -16,8 +16,6 @@ figuring out what emails exist in our database */
 
 const handleForgotPassword = async (db, req, res) => {
 
-  // redisHelper.viewAll();
-  // redisHelper.flushAllFromRedis();
   const { yourEmail } = req.body;
 
   if (!yourEmail) {
@@ -28,20 +26,17 @@ const handleForgotPassword = async (db, req, res) => {
     .where({'email': yourEmail})
     .then(user => {
       if (user[0].id) {
-        // const randomId = uuidv4();
-        const randomId = 'av'
+        const randomId = uuidv4();
         redisHelper.setToken(yourEmail, randomId)
         .then(check=>{
-          // console.log('check = ' + check)
           if (check===true) {
             handleSendingEmail(randomId, req, res)
           } else {
-            // console.log('noooo')
             throw new Error
           }
         })
         .catch(err=>{
-          console.log('Something went wrong in step 1 ' + err)
+          console.log('Something went wrong in step forgot step 1 ' + err)
         })
         return res.status(200).json('Please check your email and enter the code provided in the box below')
       }
