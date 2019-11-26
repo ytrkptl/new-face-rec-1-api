@@ -1,28 +1,15 @@
 const jwt = require('../signin').jwt;
-const redisClient = require('../signin').redisClient;
+const redisHelper = require('../../utils/redis-helper');
 
 const signToken = (username) => {
   const jwtPayload = { username };
   return jwt.sign(jwtPayload, 'JWT_SECRET_KEY', { expiresIn: '2 days'});
 };
 
-const setToken = (key, value) => Promise.resolve(redisClient.set(key, value));
-
-// this will return a promise containing multiple keys and values in an array
-const getMultipleValues = (key1, key2, key3, key4) => {
-  return new Promise((resolve, reject) => {
-    redisClient.mget(key1, key2, key3, key4, function (error, result) {
-    if (error) {
-      reject(error);
-    }
-    resolve(result);
-  })
-})}
-
 const createSession = (user) => {
   const { email, id } = user;
   const token = signToken(email);
-  return setToken(token, id)
+  return redisHelper.setToken(token, id)
     .then(() => {
       return { success: 'true', userId: id, token, user }
     })
@@ -30,10 +17,10 @@ const createSession = (user) => {
 };
 
 const handleRegister = (db, bcrypt, req, res) => {
-
+  // redisHelper.viewAll();
   const { confirmationId } = req.body;
   let uniqueKey = confirmationId + ' ';
-  return getMultipleValues(uniqueKey + 'randomId', uniqueKey + 'name', uniqueKey + 'email', uniqueKey + 'password')
+  return redisHelper.getMultipleValues(uniqueKey + 'randomId', uniqueKey + 'name', uniqueKey + 'email', uniqueKey + 'password')
   .then(values=>{
     let randomId = values[0].slice(0,37)
     let name = values[1]
@@ -68,7 +55,7 @@ const handleRegister = (db, bcrypt, req, res) => {
 
 const getAuthTokenId = (req, res) => {
   const { authorization } = req.headers;
-  return redisClient.get(authorization, (err, reply) => {
+  return redisHelper.get(authorization, (err, reply) => {
     if (err || !reply) {
       return res.status(401).send('Unauthorized');
     }
@@ -88,5 +75,4 @@ const registerAuthentication = (db, bcrypt) => (req, res) => {
 
 module.exports = {
   registerAuthentication: registerAuthentication,
-  redisClient: redisClient
 }

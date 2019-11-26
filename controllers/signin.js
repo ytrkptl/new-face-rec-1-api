@@ -1,23 +1,17 @@
 const jwt = require('jsonwebtoken');
 if (process.env.NODE_ENV !== 'production') require('dotenv').config();
 
-// Redis Setup
-const redis = require('redis');
-
-// You will want to update your host to the proper address in production
-const redisClient = redis.createClient(process.env.REDIS_URL);
+const redisHelper = require('../utils/redis-helper');
 
 const signToken = (username) => {
   const jwtPayload = { username };
   return jwt.sign(jwtPayload, 'JWT_SECRET_KEY', { expiresIn: '2 days'});
 };
 
-const setToken = (key, value) => Promise.resolve(redisClient.set(key, value));
-
 const createSession = (user) => {
   const { email, id } = user;
   const token = signToken(email);
-  return setToken(token, id)
+  return redisHelper.setToken(token, id)
     .then(() => {
       return { success: 'true', userId: id, token, user }
     })
@@ -47,7 +41,7 @@ const handleSignin = (db, bcrypt, req, res) => {
 
 const getAuthTokenId = (req, res) => {
   const { authorization } = req.headers;
-  return redisClient.get(authorization, (err, reply) => {
+  return redisHelper.get(authorization, (err, reply) => {
     if (err || !reply) {
       return res.status(401).send('Unauthorized');
     }
@@ -67,6 +61,5 @@ const signinAuthentication = (db, bcrypt) => (req, res) => {
 
 module.exports = {
   signinAuthentication: signinAuthentication,
-  redisClient: redisClient,
   jwt: jwt
 }

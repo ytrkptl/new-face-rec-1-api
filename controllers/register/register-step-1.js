@@ -1,69 +1,5 @@
-const redisClient = require('../signin').redisClient;
+const redisHelper = require('../../utils/redis-helper');
 const handleSendingEmailConfirmation = require('../send-email-confirmation').handleSendingEmailConfirmation;
-// const viewAll = require('../forgot/forgot-step1').viewAll;
-
-const setMultipleValues = (key1, val1, key2, val2, key3, val3, key4, val4) => Promise.resolve(redisClient.mset(key1, val1, key2, val2, key3, val3, key4, val4, 'EX', 3600))
-
-// this will check if the provided key already exists
-const keyExists = (key) => {
-  return new Promise((resolve, reject) => {
-    redisClient.exists(key, function (error, result) {
-    if (error) {
-      reject(error)
-    }
-    resolve(result)
-    });
-  })
-}
-
-const setMultipleValuesWithEx = (someKeys, someVals) => {
-  return new Promise((resolve, reject) => {
-    // add randomId to each key to make it a uniquekey
-    let uniqueKey = someVals[0] + ' ';
-    let a = redisClient.multi();
-    // a.get()
-    for(let i = 0; i< someKeys.length; i++) {
-      if(i===2) {
-        a.set(someKeys[i], someVals[i])
-        a.expire(someKeys[i], 3600)
-      } else {
-        a.set(uniqueKey + someKeys[i], someVals[i])
-        a.expire(uniqueKey + someKeys[i], 3600)
-      }
-    }
-    
-    a.exec();
-
-    if (resolve) {
-      resolve(true)
-    } else if (reject) {
-      reject(false)
-    }
-  })
-}
-
-const getMultipleValuesWithEx = (someKeys) => {
-  return new Promise((resolve, reject) => {
-    // add randomId to each key to make it a uniquekey
-    let uniqueKey = someKeys[2] + ' ';
-    let a = redisClient.multi();
-    for(let i = 0; i< someKeys.length; i++) {
-      if(i===2) {
-        getToken(someKeys[i])
-      } else {
-        getToken(uniqueKey + someKeys[i])
-      }
-    }
-    
-    a.exec();
-
-    if (resolve) {
-      Promise.resolve(true)
-    } else if (reject) {
-      Promise.reject(false)
-    }
-  })
-}
 
 const uuidv4 = () => {
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
@@ -72,31 +8,20 @@ const uuidv4 = () => {
   });
 }
 
-const viewAll = (key='*')=> redisClient.keys(key, function (error, result) {
-  if (error) {
-    throw error;
-  }
-  return result;
-});
 
-const getToken = (key) => redisClient.mget(key, function (error, result) {
-  if (error) {
-    throw error;
-  }
-  return result;
-});
-
-// the function below will remove all data from redis database
-const flushAllFromRedis = () => redisClient.flushdb(function (err, succeeded) {
-    console.log(succeeded); // will be true if successfull
-});
-
+/* This method checks to see if name, email, and password are provided first, then it
+checks to see if that email exists in database. If yes, sends the user
+an email with a confirmationId and a success status of 200. If no, sends the users
+no emails but still with a success status of 200. This will keep anyone from 
+figuring out what emails exist in our database */
 const handleRegisterWithEmail = async (db, bcrypt, req, res) => {
-
+  // redisHelper.flushAllFromRedis();
   const { name, email, password } = req.body;
+
   if (!name || !email || !password) {
      return res.status(400).json('Please fill out a valid form')
   }
+
   db.select('id', 'email').from('users')
     .where({'email': email})
     .then(user => {
@@ -105,13 +30,15 @@ const handleRegisterWithEmail = async (db, bcrypt, req, res) => {
           let passwordEnc = bcrypt.hashSync(password, 10);
           let someKeys = ['randomId', 'name', email, 'password', 'email']
           let someVals = [randomId, name, email, passwordEnc, email] 
-          keyExists(email)
+          redisHelper.keyExists(email)
           .then(x=>{
+            console.log(x)
             if(x===0) {
               // if key does not exists 
-              setMultipleValuesWithEx(someKeys, someVals)
+              redisHelper.setMultipleValuesWithEx(someKeys, someVals)
               .then(check=>{
                 if (check===true) {
+                  console.log(check)
                   handleSendingEmailConfirmation(randomId, req, res)
                 } else {
                   Promise.reject('noooo error').catch(err=>err)

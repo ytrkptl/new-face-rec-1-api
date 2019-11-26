@@ -1,32 +1,5 @@
-const redisClient = require('../signin').redisClient;
+const redisHelper = require('../../utils/redis-helper');
 const handleSendingEmail = require('../send-email-forgot').handleSendingEmail;
-
-const setToken = (key, value) => Promise.resolve(redisClient.set(key, value, 'EX', 3600))
-
-const getToken = (key) => redisClient.get(key, function (error, result) {
-  if (error) {
-    console.log(error);
-    throw error;
-  }
-  console.log(result)
-  return result;
-});
-
-// the function below will output all keys from redis that match the argument 'key',
-// whose default value is '*', which return all keys from redis
-const viewAll = (key='*')=> redisClient.keys(key, function (error, result) {
-  if (error) {
-    console.log(error);
-    throw error;
-  }
-  console.log(result)
-  return result;
-});
-
-// the function below will remove all data from redis database
-const flushAllFromRedis = () => redisClient.flushdb(function (err, succeeded) {
-    console.log(succeeded); // will be true if successfull
-});
 
 const uuidv4 = () => {
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
@@ -35,8 +8,16 @@ const uuidv4 = () => {
   });
 }
 
+/* This method checks to see if yourEmail was provided first, then it
+checks to see if that email exists in database. If yes, sends the user
+an email with a resetId and a success status of 200. If no, sends the users
+no emails but still with a success status of 200. This will keep anyone from 
+figuring out what emails exist in our database */
+
 const handleForgotPassword = async (db, req, res) => {
 
+  // redisHelper.viewAll();
+  // redisHelper.flushAllFromRedis();
   const { yourEmail } = req.body;
 
   if (!yourEmail) {
@@ -47,14 +28,15 @@ const handleForgotPassword = async (db, req, res) => {
     .where({'email': yourEmail})
     .then(user => {
       if (user[0].id) {
-        const randomId = uuidv4();
-        setToken(yourEmail, randomId)
+        // const randomId = uuidv4();
+        const randomId = 'av'
+        redisHelper.setToken(yourEmail, randomId)
         .then(check=>{
-          console.log('check = ' + check)
+          // console.log('check = ' + check)
           if (check===true) {
             handleSendingEmail(randomId, req, res)
           } else {
-            console.log('noooo')
+            // console.log('noooo')
             throw new Error
           }
         })

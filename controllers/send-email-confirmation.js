@@ -8,7 +8,8 @@ if (process.env.NODE_ENV !== 'production') require('dotenv').config();
 // am using MailThis.to, FormSubmit, FormSpree, etc. instead.
 
 const handleSendingEmailConfirmation = (someToken, req, res) => {
-  const { yourEmail, name, message } = req.body;
+  
+  const { email, name, password } = req.body;
   let transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -16,22 +17,23 @@ const handleSendingEmailConfirmation = (someToken, req, res) => {
       pass: process.env.USER_PASS
     }
   });
-
+  console.log(email, name, password)
+  // console.log(y)
   let mailOptions = {
     //only using my email to send from
     from: process.env.USER_EMAIL,
     //only using my email to send to
-    to: `${yourEmail}`,
+    to: `${email}`,
     // Subject line
     subject: `From ${name}`, 
-    // plain text body
+    // plain text bodynpm 
     // text: 'Hello world?', 
     // don't allow sending html below
     html: `
       <h2>${name}</h2>
       <br/>
-      <h3>${message}<h3>
-      <a href="http://localhost:3001">${someToken}</a>
+      <h3>Copy the code below and paste it in the confirmation box provided.<h3>
+      ${someToken}</a>
       `
 };
 

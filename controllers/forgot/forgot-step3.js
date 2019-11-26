@@ -1,6 +1,6 @@
-// This corresponds to Step 3 of Forgot Password
-// It only happens if Step 1 and 2 are fulfilled,
-// followed by filling both "new password" and "confirm new password"
+/*This corresponds to Step 3 of Forgot Password
+It only happens if Step 1 and 2 are fulfilled,
+followed by filling both "new password" and "confirm new password"*/
 
 const handleUpdateNewPassword = async (req, res, db, bcrypt) => {
 
