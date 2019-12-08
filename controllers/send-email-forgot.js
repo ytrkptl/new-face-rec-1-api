@@ -32,7 +32,8 @@ const handleSendingEmail = (someToken, req, res) => {
       <br/>
       <h3>Did you forget your email. We are sorry to hear that. However,
       there is a way for you to retrieve it. Copy and paste the code provided
-      below into the resetId input provided on our site.<h3><p>${someToken}</p>
+      below into the resetId input provided on our site.<h3>
+      <p>${someToken}</p>
       <h4>Any other messages: ${message} </h4>
       `
 };
