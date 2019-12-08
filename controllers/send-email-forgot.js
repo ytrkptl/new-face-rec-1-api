@@ -1,4 +1,4 @@
-// 'use strict';
+'use strict';
 const nodemailer = require('nodemailer');
 
 if (process.env.NODE_ENV !== 'production') require('dotenv').config();
@@ -32,8 +32,7 @@ const handleSendingEmail = (someToken, req, res) => {
       <br/>
       <h3>Did you forget your email. We are sorry to hear that. However,
       there is a way for you to retrieve it. Copy and paste the code provided
-      below into the resetId input provided on our site.<h3>
-      <a href="http://localhost:3001">${someToken}</a>
+      below into the resetId input provided on our site.<h3><p>${someToken}</p>
       <h4>Any other messages: ${message} </h4>
       `
 };
