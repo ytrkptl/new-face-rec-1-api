@@ -19,24 +19,41 @@ const handleSendingEmail = (someToken, req, res) => {
 
   let mailOptions = {
     //only using my email to send from
-    from: process.env.USER_EMAIL,
+    from: `Yatrik Patel ${process.env.USER_EMAIL}`,
     //only using my email to send to
     to: `${yourEmail}`,
     // Subject line
-    subject: `From ${name}`, 
+    subject: `Yatrik's Face Recognition App - Forgot Password Step 1`, 
     // plain text body
     // text: 'Hello world?', 
     // don't allow sending html below
     html: `
-      <h2>Hi ${name},</h2>
-      <br/>
-      <h3>Did you forget your email. We are sorry to hear that. However,
-      there is a way for you to retrieve it. Copy and paste the code provided
-      below into the resetId input provided on our site.<h3>
-      <p>${someToken}</p>
-      <h4>Any other messages: ${message} </h4>
-      `
-};
+      <table style="overflow-x:auto;width:100%;max-width:600px;border:1px solid black;margin:auto">
+        <tr style="height:50px;background:lightgray">
+          <th style="border-bottom:1px solid black;">Yatrik's Face Recognition App - Forgot Password Step 1</th>
+        </tr>
+        <tr style="overflow-x:auto;width:100%;border:1px solid black;background:#def;">
+          <td style="padding:30px;">
+            <p>Hi there,</p>
+            <p>Did you forget your password? We're sorry to hear that. 
+              Here is how you can retrieve it:  Simply copy and 
+              paste the code provided below into the "resetId" input 
+              provided on our site.
+            <p>
+            <table>
+              <tr>
+                <td style="background-color:lightgray;padding:10px;cursor:pointer;">
+                  <h3 style="padding:auto;margin:auto">${someToken}</h3>
+                </td>
+              </tr>
+            </table>
+            <p>Thank you!<br/>-Yatrik Patel</p>
+            <span style="font-style: italic">Ps...did you try using the "toggle rain" button at the top left of our site? If not yet, please do check it out 
+            at <a href="https://new-face-rec-1-api.herokuapp.com/">this link</a>.</span>
+          </td>
+        </tr>
+      </table>
+`};
 
   transporter.sendMail(mailOptions, function(error, info){
     if (error) {

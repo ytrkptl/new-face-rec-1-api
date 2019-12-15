@@ -1,4 +1,4 @@
-// 'use strict';
+'use strict';
 const nodemailer = require('nodemailer');
 
 if (process.env.NODE_ENV !== 'production') require('dotenv').config();
@@ -23,17 +23,37 @@ const handleSendingEmailConfirmation = (someToken, req, res) => {
     //only using my email to send to
     to: `${email}`,
     // Subject line
-    subject: `From ${name}`, 
+    subject: `Yatrik's Face Recognition App - Confirmation`, 
     // plain text bodynpm 
     // text: 'Hello world?', 
     // don't allow sending html below
     html: `
-      <h2>${name}</h2>
-      <br/>
-      <h3>Copy the code below and paste it in the confirmation box provided.<h3>
-      <a>${someToken}</a>
-      `
-};
+      <table style="overflow-x:auto;width:100%;max-width:600px;border:1px solid black;margin:auto">
+        <tr style="height:50px;background:lightgray">
+          <th style="border-bottom:1px solid black;">Yatrik's Face Recognition App - Confirmation </th>
+        </tr>
+        <tr style="overflow-x:auto;width:100%;border:1px solid black;background:#def;">
+          <td style="padding:30px;">
+            <p>Hello,</p>
+            <p>Welcome to Yatrik's Face Recognition App!</p>
+            <p>Thank you for signing up. There is one last step to complete the sign-up process though: Simply copy and 
+              paste the code provided below into the "Confirmation" input 
+              provided on our site.
+            <p>
+            <table>
+              <tr>
+                <td style="background-color:lightgray;padding:10px;cursor:pointer;">
+                  <h3 style="padding:auto;margin:auto">${someToken}</h3>
+                </td>
+              </tr>
+            </table>
+            <p>Thank you!<br/>-Yatrik Patel</p>
+            <span style="font-style: italic">Ps...did you try using the "toggle rain" button at the top left of our site? If not yet, please do check it out 
+            at <a href="https://new-face-rec-1-api.herokuapp.com/">this link</a>.</span>
+          </td>
+        </tr>
+      </table>
+`};
 
   transporter.sendMail(mailOptions, function(error, info){
     if (error) {
