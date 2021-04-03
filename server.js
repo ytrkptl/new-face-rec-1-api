@@ -1,9 +1,8 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const cors = require('cors');
-const knex = require('knex');
-const bcrypt = require('bcrypt');
-const morgan = require('morgan');
+const express = require("express");
+const cors = require("cors");
+const knex = require("knex");
+const bcrypt = require("bcryptjs");
+const morgan = require("morgan");
 
 // comes with Express.
 const path = require('path');
@@ -33,9 +32,9 @@ const db = knex({
 
 const app = express();
 
-app.use(morgan('combined'));
-app.use(cors('*'))
-app.use(bodyParser.json());
+app.use(morgan("combined"));
+app.use(cors("*"));
+app.use(express.json());
 
 app.get('/favicon.ico', (req, res) => res.status(204));
 app.get('/', (req, res) => {
