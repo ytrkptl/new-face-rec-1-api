@@ -9,6 +9,4 @@ const removeAuthToken = (req, res) => {
   return res.status(400).json('No users are logged in.')
 }
 
-module.exports = {
-  removeAuthToken: removeAuthToken
-}
+module.exports = { removeAuthToken }

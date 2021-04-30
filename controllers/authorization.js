@@ -17,6 +17,4 @@ const requireAuth = (req, res, next) => {
   }).catch(err=>console.log(err + ' in authorization.js'))
 }
 
-module.exports = {
-  requireAuth: requireAuth
-}
+module.exports = { requireAuth }

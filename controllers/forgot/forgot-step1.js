@@ -46,6 +46,4 @@ const handleForgotPassword = async (db, req, res) => {
     })
 }
 
-module.exports = {
-  handleForgotPassword: handleForgotPassword
-}
+module.exports = { handleForgotPassword }

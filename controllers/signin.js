@@ -59,7 +59,4 @@ const signinAuthentication = (db, bcrypt) => (req, res) => {
     .catch(err => res.status(400).json(err));
 }
 
-module.exports = {
-  signinAuthentication: signinAuthentication,
-  jwt: jwt
-}
+module.exports = { signinAuthentication, jwt }
