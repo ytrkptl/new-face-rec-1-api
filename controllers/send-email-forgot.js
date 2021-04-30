@@ -66,6 +66,4 @@ const handleSendingEmail = (someToken, req, res) => {
   });
 }
 
-module.exports = {
-  handleSendingEmail: handleSendingEmail
-}
+module.exports = { handleSendingEmail }

@@ -66,6 +66,4 @@ const handleSendingEmailConfirmation = (someToken, req, res) => {
   });
 }
 
-module.exports = {
-  handleSendingEmailConfirmation: handleSendingEmailConfirmation
-}
+module.exports = { handleSendingEmailConfirmation }

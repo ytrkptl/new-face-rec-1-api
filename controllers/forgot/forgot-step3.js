@@ -26,6 +26,4 @@ const handleUpdateNewPassword = async (req, res, db, bcrypt) => {
   .catch(err => console.log('from forgot step 3 ' + err))
 }
 
-module.exports = {
-  handleUpdateNewPassword: handleUpdateNewPassword
-}
+module.exports = { handleUpdateNewPassword }

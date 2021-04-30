@@ -109,14 +109,13 @@ const setMultipleValuesWithEx = (someKeys, someVals) => {
 }
 
 module.exports = {
-  redisClient: redisClient,
-  getToken: getToken,
-  setToken: setToken,
-  deleteToken: deleteToken,
-  keyExists: keyExists,
-  getMultipleValues: getMultipleValues,
-  getMultipleValuesWithEx: getMultipleValuesWithEx,
-  setMultipleValuesWithEx: setMultipleValuesWithEx,
-  viewAll: viewAll,
-  flushAllFromRedis: flushAllFromRedis
+  redisClient,
+  getToken,
+  setToken,
+  deleteToken,
+  keyExists,
+  getMultipleValues,
+  setMultipleValuesWithEx,
+  viewAll,
+  flushAllFromRedis
 }

@@ -27,6 +27,4 @@ const handleResetId = (req, res) => {
   })
 }
 
-module.exports = {
-  handleResetId: handleResetId
-}
+module.exports = { handleResetId }

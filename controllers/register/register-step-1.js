@@ -64,6 +64,4 @@ const handleRegisterWithEmail = async (db, bcrypt, req, res) => {
     })
 }
 
-module.exports = {
-  handleRegisterWithEmail: handleRegisterWithEmail,
-}
+module.exports = { handleRegisterWithEmail }
